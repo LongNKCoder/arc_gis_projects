@@ -1,0 +1,153 @@
+<html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Add a point, line, and polygon</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+
+    <script>
+
+        require([
+            "esri/config",
+            "esri/Map",
+            "esri/views/MapView",
+
+            "esri/Graphic",
+            "esri/layers/GraphicsLayer"
+
+        ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+            var csvFilePath = "raw_data.csv";
+            var csvSeparator = ",";
+
+            // Use the Fetch API to load the CSV file
+            fetch(csvFilePath)
+                .then(response => response.text())
+                .then(csvText => {
+                    // Split the CSV file into lines
+                    var csvLines = csvText.split("\n");
+
+                    // Create a new array to hold the parsed CSV data
+                    var csvData = [];
+
+                    // Parse each CSV line into an array of fields
+                    for (var i = 0; i < csvLines.length; i++) {
+                        var csvFields = csvLines[i].split(csvSeparator);
+
+                        // Ignore lines with no fields
+                        if (csvFields.length === 1 && csvFields[0] === "") {
+                            continue;
+                        }
+
+                        // Add the CSV fields to the parsed data array
+                        csvData.push([parseFloat(csvFields[0]), parseFloat(csvFields[1])]);
+                    }
+
+                    esriConfig.apiKey = "UnknowToken";
+                    const map = new Map({
+                        basemap: "arcgis-topographic" // Basemap layer
+                    });
+
+                    const view = new MapView({
+                        map: map,
+                        center: [104.8406781, 19.2745876],
+                        zoom: 9, // scale: 72223.819286
+                        container: "viewDiv",
+                        constraints: {
+                            snapToZoom: false
+                        }
+                    });
+
+                    const graphicsLayer = new GraphicsLayer();
+
+                    const popupTemplate = {
+                        title: "{Name}",
+                        content: "{Description}"
+                    }
+
+                    const polygonGraphic = new Graphic({
+                        geometry: {
+                            type: "polygon",
+                            rings: csvData
+                        },
+                        symbol: {
+                            type: "simple-fill",
+                            color: [227, 139, 79, 0.8],  // Orange, opacity 80%
+                            outline: {
+                                color: [255, 255, 255],
+                                width: 1
+                            }
+                        },
+
+                        attributes: {
+                            Name: "Chi tiết về tỉnh Nghệ An",
+                            Description: "Dân số: 3.625.000 người \n Diện tích: 16.486,5 km"
+                        },
+                        popupTemplate: popupTemplate
+
+                    });
+                    graphicsLayer.add(polygonGraphic);
+
+                    // add Vinh city
+                    const pointVinh = new Graphic({
+                        geometry: {
+                            type: "point",
+                            longitude: 105.677072,
+                            latitude: 18.693152
+                        },
+                        symbol: {
+                            type: "picture-marker",
+                            url: "https://cdn-icons-png.flaticon.com/512/2451/2451728.png",
+                        },
+                        attributes: {
+                            Name: "Chi tiết về thành phố Vinh",
+                            Description: "Dân số: 339.114 người \n Diện tích: 105 km"
+                        },
+                        popupTemplate: popupTemplate
+                    });
+                    graphicsLayer.add(pointVinh);
+
+                    // add Vinh university
+                    const pointVinhUniversity = new Graphic({
+                        geometry: {
+                            type: "point",
+                            longitude: 105.631708,
+                            latitude: 18.6590436
+                        },
+                        symbol: {
+                            type: "picture-marker",
+                            url: "https://cdn-icons-png.flaticon.com/512/2231/2231696.png",
+                        },
+                        attributes: {
+                            Name: "Chi tiết về đại học Vinh",
+                            Description: "Thành lập: 1959 \n Kinh Phí: 395,89 tỷ đồng \n Sinh viên: 14.066 sinh viên"
+                        },
+                        popupTemplate: popupTemplate
+                    });
+                    graphicsLayer.add(pointVinhUniversity);
+
+                    map.add(graphicsLayer);
+                })
+                .then(csvData => { return ring = csvData })
+                .catch(error => console.error("Failed to load CSV file:", error));
+        });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
