@@ -62,8 +62,8 @@
 
                     const view = new MapView({
                         map: map,
-                        center: [106.1302899, 18.9221042],
-                        zoom: 13, // scale: 72223.819286
+                        center: [104.8406781, 19.2745876],
+                        zoom: 9, // scale: 72223.819286
                         container: "viewDiv",
                         constraints: {
                             snapToZoom: false
@@ -72,116 +72,76 @@
 
                     const graphicsLayer = new GraphicsLayer();
 
-                    const polygon = {
-                        type: "polygon",
-                        rings: csvData
-                    };
-
-                    const simpleFillSymbol = {
-                        type: "simple-fill",
-                        color: [227, 139, 79, 0.8],  // Orange, opacity 80%
-                        outline: {
-                            color: [255, 255, 255],
-                            width: 1
-                        }
-                    };
-
                     const popupTemplate = {
                         title: "{Name}",
                         content: "{Description}"
                     }
-                    const attributes = {
-                        Name: "Chi tiết về tỉnh Nghệ An",
-                        Description: "Dân số: 3.625.000 người \n Diện tích: 16.486,5 km"
-                    }
 
                     const polygonGraphic = new Graphic({
-                        geometry: polygon,
-                        symbol: simpleFillSymbol,
+                        geometry: {
+                            type: "polygon",
+                            rings: csvData
+                        },
+                        symbol: {
+                            type: "simple-fill",
+                            color: [227, 139, 79, 0.8],  // Orange, opacity 80%
+                            outline: {
+                                color: [255, 255, 255],
+                                width: 1
+                            }
+                        },
 
-                        attributes: attributes,
+                        attributes: {
+                            Name: "Chi tiết về tỉnh Nghệ An",
+                            Description: "Dân số: 3.625.000 người \n Diện tích: 16.486,5 km"
+                        },
                         popupTemplate: popupTemplate
 
                     });
                     graphicsLayer.add(polygonGraphic);
 
-                    // const pointVinh = new Graphic({
-                    //     geometry: { //Create a point
-                    //         type: "point",
-                    //         longitude: 105.677072,
-                    //         latitude: 18.693152
-                    //     },
-                    //     symbol: {
-                    //         "type": "picture-marker",
-                    //         "url": "https://cdn-icons-png.flaticon.com/512/2451/2451728.png",
-                    //         "width": "18px",
-                    //         "height": "18px"
-                    //     }
-                    // });
-
-                    const point = { //Create a point
-                        type: "point",
-                        longitude: 105.677072,
-                        latitude: 18.693152
-                    };
-                    const simpleMarkerSymbol = {
-                        type: "picture-marker",
-                        url: "https://cdn-icons-png.flaticon.com/512/2451/2451728.png",
-                        width: "1em",
-                        height: "1em"
-                    };
-
-                    const pointGraphic = new Graphic({
-                        geometry: point,
-                        symbol: simpleMarkerSymbol
+                    // add Vinh city
+                    const pointVinh = new Graphic({
+                        geometry: {
+                            type: "point",
+                            longitude: 105.677072,
+                            latitude: 18.693152
+                        },
+                        symbol: {
+                            type: "picture-marker",
+                            url: "https://cdn-icons-png.flaticon.com/512/2451/2451728.png",
+                        },
+                        attributes: {
+                            Name: "Chi tiết về thành phố Vinh",
+                            Description: "Dân số: 339.114 người \n Diện tích: 105 km"
+                        },
+                        popupTemplate: popupTemplate
                     });
-                    graphicsLayer.add(pointGraphic);
+                    graphicsLayer.add(pointVinh);
+
+                    // add Vinh university
+                    const pointVinhUniversity = new Graphic({
+                        geometry: {
+                            type: "point",
+                            longitude: 105.631708,
+                            latitude: 18.6590436
+                        },
+                        symbol: {
+                            type: "picture-marker",
+                            url: "https://cdn-icons-png.flaticon.com/512/2231/2231696.png",
+                        },
+                        attributes: {
+                            Name: "Chi tiết về đại học Vinh",
+                            Description: "Thành lập: 1959 \n Kinh Phí: 395,89 tỷ đồng \n Sinh viên: 14.066 sinh viên"
+                        },
+                        popupTemplate: popupTemplate
+                    });
+                    graphicsLayer.add(pointVinhUniversity);
 
                     map.add(graphicsLayer);
                 })
                 .then(csvData => { return ring = csvData })
                 .catch(error => console.error("Failed to load CSV file:", error));
-            // const point = { //Create a point
-            //     type: "point",
-            //     longitude: -118.80657463861,
-            //     latitude: 34.0005930608889
-            // };
-            // const simpleMarkerSymbol = {
-            //     type: "simple-marker",
-            //     color: [226, 119, 40],  // Orange
-            //     outline: {
-            //         color: [255, 255, 255], // White
-            //         width: 1
-            //     }
-            // };
-
-            // const pointGraphic = new Graphic({
-            //     geometry: point,
-            //     symbol: simpleMarkerSymbol
-            // });
-            // graphicsLayer.add(pointGraphic);
-
-            // Create a line geometry
-            // const polyline = {
-            //     type: "polyline",
-            //     paths: [
-            //         [-118.821527826096, 34.0139576938577], //Longitude, latitude
-            //         [-118.814893761649, 34.0080602407843], //Longitude, latitude
-            //         [-118.808878330345, 34.0016642996246]  //Longitude, latitude
-            //     ]
-            // };
-            // const simpleLineSymbol = {
-            //     type: "simple-line",
-            //     color: [226, 119, 40], // Orange
-            //     width: 2
-            // };
-
-            // const polylineGraphic = new Graphic({
-            //     geometry: polyline,
-            //     symbol: simpleLineSymbol
-            // });
-            // graphicsLayer.add(polylineGraphic);
-
         });
     </script>
 </head>
