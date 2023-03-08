@@ -55,11 +55,11 @@
                         csvData.push([parseFloat(csvFields[0]), parseFloat(csvFields[1])]);
                     }
 
+                    // set up
                     esriConfig.apiKey = "UnknowToken";
                     const map = new Map({
                         basemap: "arcgis-topographic" // Basemap layer
                     });
-
                     const view = new MapView({
                         map: map,
                         center: [104.8406781, 19.2745876],
@@ -69,15 +69,14 @@
                             snapToZoom: false
                         }
                     });
-
                     const graphicsLayer = new GraphicsLayer();
-
                     const popupTemplate = {
                         title: "{Name}",
                         content: "{Description}"
                     }
 
-                    const polygonGraphic = new Graphic({
+                    // add polygon NgheAn
+                    const polygonNgheAn = new Graphic({
                         geometry: {
                             type: "polygon",
                             rings: csvData
@@ -98,7 +97,7 @@
                         popupTemplate: popupTemplate
 
                     });
-                    graphicsLayer.add(polygonGraphic);
+                    graphicsLayer.add(polygonNgheAn);
 
                     // add Vinh city
                     const pointVinh = new Graphic({
@@ -138,9 +137,59 @@
                     });
                     graphicsLayer.add(pointVinhUniversity);
 
+                    // add route QL1
+                    const lineQL1 = {
+                        type: "polyline",
+                        paths: [
+                            [105.723977, 19.310736], //Longitude, latitude
+                            [105.724507, 19.295233], //Longitude, latitude
+                            [105.725283, 19.284811],  //Longitude, latitude
+                            [105.724017, 19.279780],  //Longitude, latitude
+                            [105.718525, 19.270824],  //Longitude, latitude
+                            [105.716483, 19.269102],  //Longitude, latitude
+                            [105.709895, 19.249344],  //Longitude, latitude
+                            [105.707513, 19.247825],  //Longitude, latitude
+                            [105.700133, 19.238470],  //Longitude, latitude
+                            [105.685841, 19.212930],  //Longitude, latitude
+                            [105.589837, 19.087804],  //Longitude, latitude
+                            [105.582398, 19.065546],  //Longitude, latitude
+                            [105.588351, 19.009206],  //Longitude, latitude
+                            [105.588235, 19.006563],  //Longitude, latitude
+                            [105.588235, 19.006563],  //Longitude, latitude
+                            [105.592877, 19.004292],  //Longitude, latitude
+                            [105.600413, 18.981895],  //Longitude, latitude
+                            [105.608953, 18.921266],  //Longitude, latitude
+                            [105.600268, 18.885414],  //Longitude, latitude
+                            [105.649693, 18.856008],  //Longitude, latitude
+                            [105.649236, 18.794799],  //Longitude, latitude
+                            [105.642344, 18.794102],  //Longitude, latitude
+                            [105.635473, 18.789184],  //Longitude, latitude
+                            [105.631832, 18.779575],  //Longitude, latitude
+                            [105.632392, 18.736018],  //Longitude, latitude
+                            [105.629111, 18.711056],  //Longitude, latitude
+                            [105.618834, 18.688496],  //Longitude, latitude
+                            [105.618532, 18.670363],  //Longitude, latitude
+                            [105.620055, 18.667483],  //Longitude, latitude
+                            [105.704625, 18.639295],  //Longitude, latitude
+                        ]
+                    };
+                    const routeQL1 = new Graphic({
+                        geometry: lineQL1,
+                        symbol: {
+                            type: "simple-line",
+                            color: [0, 255, 255],
+                            width: 2
+                        },
+                        attributes: {
+                            Name: "Chi tiết về Quoc Lo 1A",
+                            Description: "Xây dựng: 1930\n Chiều dài 85.5 km"
+                        },
+                        popupTemplate: popupTemplate
+                    });
+                    graphicsLayer.add(routeQL1);
+
                     map.add(graphicsLayer);
                 })
-                .then(csvData => { return ring = csvData })
                 .catch(error => console.error("Failed to load CSV file:", error));
         });
     </script>
